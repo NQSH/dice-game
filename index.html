@@ -12,73 +12,126 @@
   <link href="https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./style.css">
 </head>
-<body class="container">
-  <div class="col h-100 d-flex flex-column align-items-center justify-content-center">
-    
-    <header class="row align-items-center w-100 mb-5">
-      <div class="col-12 col-sm-6 text-center text-sm-end">
-        <h1>DICEGAME</h1>
-      </div>
-      <div class="col-12 col-sm-6 text-center text-sm-start">
-        <img id="logo" class="img-fluid" src="./logo.svg" alt="logo.svg" width="100">
-      </div>
-    </header>
+<body class="container-fluid d-flex flex-column align-items-center justify-content-center">
 
-    <div class="menu-wrapper row">
-      <div class="row text-center px-0">
-        <div class="menu-btn row align-items-center" data-bs-toggle="collapse" href="#welcome" role="button" aria-expanded="false" aria-controls="welcome">
-          <span class="menu-icon col material-icons text-center text-sm-end">casino</span>
-          <h2 class="menu-name col text-start d-none d-sm-block">Présentation</h2>          
-        </div>
-        <div class="row collapse my-2 px-0 justify-content-center" id="welcome">
-          <div class="card text-start col col-lg-6">
-            <div class="card-body">
-              <h3 class="card-title">Bienvenue sur DiceGame !</h3>
-              <p class="card-text">DiceGame est un jeu de dés très simple qui ne demande que 2 joueurs. Mêlant le pari à la stratégie, à vous de décider ce que gagne le vainqueur, ou ce que perd son adversaire. Bon chance !</p>
-            </div>
+  <header class="row align-items-center w-100 mb-5">
+    <div class="col-12 col-sm-6 text-center text-sm-end">
+      <h1>DICEGAME</h1>
+    </div>
+    <div class="col-12 col-sm-6 text-center text-sm-start">
+      <img id="logo" class="img-fluid" src="./logo.svg" alt="logo.svg" width="100">
+    </div>
+  </header>
+
+  <div id="menu-wrapper" class="row">
+    <div class="row text-center px-0">
+      <div class="menu-btn row align-items-center" data-bs-toggle="collapse" href="#welcome" role="button" aria-expanded="false" aria-controls="welcome">
+        <span class="menu-icon col material-icons text-center text-sm-end">casino</span>
+        <h2 class="menu-name col text-start d-none d-sm-block">Présentation</h2>          
+      </div>
+      <div class="row collapse my-2 px-0 justify-content-center" id="welcome">
+        <div class="card text-start col col-md-8 col-lg-6">
+          <div class="card-body">
+            <h3 class="card-title">Bienvenue sur DiceGame !</h3>
+            <p class="card-text">DiceGame est un jeu de dés très simple qui ne demande que 2 joueurs. Mêlant le pari à la stratégie, à vous de décider ce que gagne le vainqueur, ou ce que perd son adversaire. Bon chance !</p>
           </div>
-        </div>
-      </div>
-
-      <div class="row text-center px-0">
-        <div class="menu-btn row align-items-center" data-bs-toggle="collapse" href="#rules" role="button" aria-expanded="false" aria-controls="rules">
-          <span class="menu-icon col material-icons text-center text-sm-end">segment</span>
-          <h2 class="menu-name col text-start d-none d-sm-block">Règles du jeu</h2>
-        </div>
-        <div class="row collapse my-2 px-0 justify-content-center" id="rules">
-          <div class="card text-start col col-lg-6">
-            <div class="card-body">
-              <h3 class="card-title">Comment jouer ?</h3>
-              <p class="card-text">
-                Le jeu comprend 2 joueurs sur un seul et même écran. <br>
-                Chaque joueur possède un score temporaire (ROUND) et un score global (GLOBAL). <br>
-                À chaque tour, le joueur a son ROUND initialisé à 0 et peut lancer un dé autant de fois qu'il le souhaite. Le 
-                résultat d’un lancer est ajouté au ROUND. <br>
-                Lors de son tour, le joueur peut décider à tout moment de: <br>
-                - Cliquer sur l’option “Hold”, qui permet d’envoyer les points du ROUND vers le GLOBAL. Ce sera alors le
-                tour de l’autre joueur. <br>
-                - Lancer le dé. S’il obtient un 1, son score ROUND est perdu et c’est la fin de son tour.
-                Le premier joueur qui atteint les 100 points sur global gagne le jeu.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="row text-center px-0">
-        <div class="menu-btn row align-items-center" data-bs-toggle="collapse" href="#game" role="button" aria-expanded="false" aria-controls="game">
-          <span class="menu-icon col material-icons text-center text-sm-end text-danger">sports_esports</span>
-          <h2 class="menu-name col text-start d-none d-sm-block">Jouer</h2>
-        </div>
-        <div class="row collapse" id="game">
-          <p>Le Jeu</p>
         </div>
       </div>
     </div>
-  </div>
 
+    <div class="row text-center px-0">
+      <div class="menu-btn row align-items-center" data-bs-toggle="collapse" href="#rules" role="button" aria-expanded="false" aria-controls="rules">
+        <span class="menu-icon col material-icons text-center text-sm-end">segment</span>
+        <h2 class="menu-name col text-start d-none d-sm-block">Règles du jeu</h2>
+      </div>
+      <div class="row collapse my-2 px-0 justify-content-center" id="rules">
+        <div class="card text-start col col-md-8 col-lg-6">
+          <div class="card-body">
+            <h3 class="card-title">Comment jouer ?</h3>
+            <p class="card-text">
+              Le jeu comprend 2 joueurs sur un seul et même écran. <br>
+              Chaque joueur possède un score temporaire (ROUND) et un score global (GLOBAL). <br>
+              À chaque tour, le joueur a son ROUND initialisé à 0 et peut lancer un dé autant de fois qu'il le souhaite. Le 
+              résultat d’un lancer est ajouté au ROUND. <br>
+              Lors de son tour, le joueur peut décider à tout moment de: <br>
+              - Cliquer sur l’option “Hold”, qui permet d’envoyer les points du ROUND vers le GLOBAL. Ce sera alors le
+              tour de l’autre joueur. <br>
+              - Lancer le dé. S’il obtient un 1, son score ROUND est perdu et c’est la fin de son tour.
+              Le premier joueur qui atteint les 100 points sur global gagne le jeu.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row text-center px-0">
+      <div class="menu-btn row align-items-center" data-bs-toggle="collapse" href="#game" role="button" aria-expanded="false" aria-controls="game">
+        <span class="menu-icon col material-icons text-center text-sm-end text-danger">sports_esports</span>
+        <h2 class="menu-name col text-start d-none d-sm-block">Jouer</h2>
+      </div>
+      <div class="row row-cols-1 row-cols-md-2 collapse mt-5" id="game">
+        
+        <div class="col text-center text-md-end mb-3 mb-md-0">
+          <button id="continue-btn" type="button" class="btn btn-outline-dark" disabled>
+            Continuer
+            <span class="material-icons align-middle ms-2" style="font-size: 20px;">double_arrow</span>
+          </button>
+        </div>
+        <div class="col text-center text-md-start">
+          <button id="newgame-btn" type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+            <span class="material-icons align-middle me-2" style="font-size: 20px;">add_circle_outline</span>
+            Nouvelle partie
+          </button>
+        </div>
+
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Nouvelle partie</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <p>Choisissez un pseudo</p>
+                <form>
+                  <div class="mb-3">
+                    <label for="player1" class="form-label">Joueur 1</label>
+                    <input type="text" class="form-control" id="player1">
+                  </div>
+                  <div class="mb-3">
+                    <label for="player2" class="form-label">Joueur 2</label>
+                    <input type="text" class="form-control" id="player2">
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button id="play-btn" type="button" class="btn btn-danger" data-bs-dismiss="modal">JOUER</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+
+  <div id="game-screen" class=" row">
+    <div class="row">
+      <button id="return-btn">RETURN</button>
+    </div>
+    <div class="col-6">
+      <p>Player1</p>
+    </div>
+    <div class="col">
+      <p>Game controls</p>
+    </div>
+    <div class="col-6">
+      <p>Player2</p>
+    </div>
+  </div>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
   <script src="./script.js"></script>
+  
 </body>
 </html>
