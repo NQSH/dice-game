@@ -11,3 +11,24 @@ html, body {
   margin-right: 0 !important;
   margin-left: 0 !important;
 }
+
+.material-icons {
+  font-size: 48px;
+}
+
+h2 {
+  margin-bottom: 0px;
+}
+
+p.card-text {
+  font-size: .8rem !important;
+}
+
+.menu-wrapper {
+  height: 0px;
+  opacity: 0;
+}
+
+.menu-name {
+  opacity: 0;
+}
