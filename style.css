@@ -16,6 +16,9 @@ html, body {
   font-size: 48px;
 }
 
+h1 {
+  font-weight: bold;
+}
 h2 {
   margin-bottom: 0px;
 }
