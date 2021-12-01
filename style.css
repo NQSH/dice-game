@@ -1,6 +1,7 @@
-html, body {
+body {
   font-family: 'lato';
   font-size: 20px;
+  height : 100vh;
 }
 
 .container {
