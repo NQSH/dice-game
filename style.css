@@ -28,11 +28,15 @@ p.card-text {
   font-size: .8rem !important;
 }
 
-.menu-wrapper {
+#menu-wrapper {
   height: 0px;
   opacity: 0;
 }
 
 .menu-name {
   opacity: 0;
+}
+
+#game-screen {
+  display: none;
 }
