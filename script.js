@@ -2,11 +2,24 @@ const random = (number) => {
   return Math.floor(Math.random() * number) + 1;
 }
 
+const popAnim = (object, callback) => {
+  object
+  .css('scale', '1.5')
+  .animate({ 'scale': 1 }, 1000, callback);
+}
+
 // MENU LOADER
 
+// Wrappers
 const header = $('header');
 const menuWrapper = $('#menu-wrapper');
 const gameScreen = $('#game-screen');
+
+// Buttons
+const continueBtn = $('#continue-btn');
+const playBtn = $('#play-btn');
+const returnbtn = $('#return-btn');
+const rollBtn = $('#roll-btn');
 
 const loadMenu = () => {
 
@@ -36,12 +49,13 @@ const loadMenu = () => {
     const currentMenu = $('.collapse.show');
     currentMenu.removeClass('show');
   })
-  $('#continue-btn, #play-btn').on('click', hideMenu);
-  $('#play-btn').on('click', () => {
-    $('#continue-btn').attr('disabled', false);
+  continueBtn,playBtn.on('click', hideMenu);
+  playBtn.on('click', () => {
+    continueBtn.attr('disabled', false);
     startNewGame();
   })
-  $('#return-btn').on('click', hideGameScreen);
+  returnbtn.on('click', hideGameScreen);
+  rollBtn.on('click', () => { rollDice(); });
 }
 
 const showGameScreen = () => {
@@ -99,6 +113,32 @@ const drawDice = (dots) => {
 }
 
 
+
+// DICE ROLLING
+
+const rollDice = (interval = 1) => {
+  console.log(interval)
+  $(document).delay(2000, () => {
+    const number = random(6);
+    const dots = numberToDots(number);
+    drawDice(dots);
+    console.log("OK")
+    if(interval < 10) {
+      return rollDice(interval + 1);
+    }
+    else {
+      // Check si c'est pas un 1
+      // Si Oui > resetRoundScore + switchPlayer + fonction failed(animation)
+      // Si Non > ajoute valeur du dé a la poche
+      return;
+    }
+  });
+  // const number = random(6);
+  // const dots = numberToDots(number);
+  // drawDice(dots);
+}
+
+
 // START NEW GAME
 
 class Player {
@@ -121,6 +161,9 @@ class Player {
     score = parseInt(this.globalScore.html()) + parseInt(this.roundScore.html());
     this.globalScore.html(score);
     this.resetRoundScore();
+  }
+  addToRoundScore(value) {
+    this.roundScore += value;
   }
 }
 
@@ -155,7 +198,6 @@ const startNewGame = () => {
 
   if(random(2) % 2 === 0) switchPlayers();
 }
-
 
 // START
 
