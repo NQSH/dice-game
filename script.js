@@ -1,3 +1,7 @@
+const random = (number) => {
+  return Math.floor(Math.random() * number) + 1;
+}
+
 // MENU LOADER
 
 const header = $('header');
@@ -34,7 +38,8 @@ const loadMenu = () => {
   })
   $('#continue-btn, #play-btn').on('click', hideMenu);
   $('#play-btn').on('click', () => {
-    document.querySelector('#continue-btn').disabled = false;
+    $('#continue-btn').attr('disabled', false);
+    startNewGame();
   })
   $('#return-btn').on('click', hideGameScreen);
 }
@@ -94,11 +99,67 @@ const drawDice = (dots) => {
 }
 
 
+// START NEW GAME
+
+class Player {
+  constructor(playerObject) {
+    this.object       = playerObject;
+    this.name         = this.object.find('.player-name');
+    this.globalScore  = this.object.find('.global-score');
+    this.roundScore   = this.object.find('.round-score');
+  }
+  setName(name) {
+    this.name.html(name);
+  }
+  resetGlobalScore() {
+    this.globalScore.html('0');
+  }
+  resetRoundScore() {
+    this.roundScore.html('0');
+  }
+  hold() {
+    score = parseInt(this.globalScore.html()) + parseInt(this.roundScore.html());
+    this.globalScore.html(score);
+    this.resetRoundScore();
+  }
+}
+
+const players = [];
+const player1 = new Player($('#player1'));
+const player2 = new Player($('#player2'));
+
+players.push(player1, player2);
+
+const player1Input = $('#player1-input');
+const player2Input = $('#player2-input');
+
+const switchPlayers = () => {
+  const picked = $('.player-picked');
+  const unpicked = $('.player-unpicked');
+
+  picked.removeClass('player-picked');
+  unpicked.removeClass('player-unpicked');
+
+  picked.addClass('player-unpicked');
+  picked.addClass('player-picked');
+}
+
+const startNewGame = () => {
+  players.forEach((player, index) => {
+    const regex = /<[^>]*>/g;
+    const inputValue = $(`#player${index + 1}-input`).val().replaceAll(regex, "");
+    player.setName(inputValue !== '' ? inputValue.toUpperCase() : `Player ${index + 1}`);
+    player.resetGlobalScore();
+    player.resetRoundScore();
+  });
+
+  if(random(2) % 2 === 0) switchPlayers();
+}
 
 
 // START
 
 $(document).ready(function() {
-  loadMenu();  
+  loadMenu();
 })
 
