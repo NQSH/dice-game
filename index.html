@@ -73,14 +73,14 @@
         
         <div class="col text-center text-md-end mb-3 mb-md-0">
           <button id="continue-btn" type="button" class="btn btn-outline-dark" disabled>
-            Continuer
-            <span class="material-icons align-middle ms-2" style="font-size: 20px;">double_arrow</span>
+            <div class="d-inline align-middle">Continuer</div>
+            <span class="material-icons d-inline align-middle ms-2" style="font-size: 30px;">double_arrow</span>
           </button>
         </div>
         <div class="col text-center text-md-start">
           <button id="newgame-btn" type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
-            <span class="material-icons align-middle me-2" style="font-size: 20px;">add_circle_outline</span>
-            Nouvelle partie
+            <span class="material-icons d-inline align-middle me-2" style="font-size: 30px;">add_circle_outline</span>
+            <div class="d-inline align-middle">Nouvelle partie</div>
           </button>
         </div>
 
@@ -95,12 +95,12 @@
                 <p>Choisissez un pseudo</p>
                 <form>
                   <div class="mb-3">
-                    <label for="player1" class="form-label">Joueur 1</label>
-                    <input type="text" class="form-control" id="player1">
+                    <label for="player1input" class="form-label">Joueur 1</label>
+                    <input id="player1input" type="text" class="form-control" maxlength="20">
                   </div>
                   <div class="mb-3">
-                    <label for="player2" class="form-label">Joueur 2</label>
-                    <input type="text" class="form-control" id="player2">
+                    <label for="player2input" class="form-label">Joueur 2</label>
+                    <input id="player2input" type="text" class="form-control" maxlength="20">
                   </div>
                 </form>
               </div>
@@ -111,22 +111,83 @@
             </div>
           </div>
         </div>
-        </div>
       </div>
     </div>
+  </div>
 
-  <div id="game-screen" class=" row">
-    <div class="row">
-      <button id="return-btn">RETURN</button>
-    </div>
-    <div class="col-6">
-      <p>Player1</p>
-    </div>
-    <div class="col">
-      <p>Game controls</p>
-    </div>
-    <div class="col-6">
-      <p>Player2</p>
+  <div id="game-screen" class="row justify-content-center w-100">
+    <div class="col-12 col-xxl-8">
+
+      <div class="row row-cols-1 row-cols-md-2 g-0 position-relative align-middle">
+
+        <div id="player1" class="text-center player-unpicked">
+          <div class="player-card row card py-md-5 border-0">
+            <p class="player-name card-title my-2">PLAYER 1</p>
+            <div class="row row-cols-2 row-cols-md-1 px-0">
+              <div>
+                <p class="mt-2 mb-0">BANQUE</p>
+                <p class="global-score text-danger mb-2">0</p>
+              </div>
+              <div class="d-flex align-items-center justify-content-center">
+                <div class="round-score-container bg-danger rounded mb-0 mb-sm-2">
+                  <p class="mt-2 mb-0 text-white">Poche</p>
+                  <p class="round-score text-white">0</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="player2" class="text-center player-picked">
+          <div class="player-card row card py-md-5 border-0">
+            <p class="player-name card-title my-2">PLAYER 2</p>
+            <div class="row row-cols-2 row-cols-md-1 px-0">
+              <div>
+                <p class="mt-2 mb-0">BANQUE</p>
+                <p class="global-score text-danger mb-2">0</p>
+              </div>
+              <div class="d-flex align-items-center justify-content-center">
+                <div class="round-score-container bg-danger rounded mb-0 mb-sm-2">
+                  <p class="mt-2 mb-0 text-white">Poche</p>
+                  <p class="round-score text-white">0</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div id="game-controls" class="text-center position-absolute top-50 start-50 translate-middle">
+          <div class="row row-cols-3 row-cols-md-1 g-3">
+            <div class="col">
+              <button id="roll-btn" class="btn bg-white rounded-pill shadow-sm">
+                <span class="material-icons d-inline align-middle text-danger">
+                  cached
+                </span>
+                <div class="d-none d-sm-inline align-middle">Lancer</div>
+              </button> 
+            </div>
+            <div class="col order-md-first">
+              <canvas id="dice-display" class="rounded bg-white border border-danger shadow" width="100px" height="100px"></canvas>
+            </div>
+            <div class="col">
+              <button id="hold-btn" class="btn bg-white rounded-pill shadow-sm">
+                <span class="material-icons d-inline align-middle text-danger">
+                  savings
+                </span>
+                <div class="d-none d-sm-inline align-middle">Déposer</div>
+              </button> 
+            </div>
+          </div>
+        </div>
+        <div id="return-btn" class="text-center position-absolute top-0 start-50 translate-middle">
+          <button class="btn btn-outline-danger border-0 shadow-sm">
+            <span class="material-icons d-inline align-middle">
+              settings
+            </span>            
+            <div class="d-inline align-middle">MENU</div>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>

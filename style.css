@@ -40,3 +40,65 @@ p.card-text {
 #game-screen {
   display: none;
 }
+
+#return-btn > button {
+  font-weight: bold;
+  border-width: 2px;
+  min-width: 135.8px;
+}
+
+#return-btn > button:not(:hover) {
+  background-color: white;
+}
+
+#game-controls {
+  
+}
+
+.player-name {
+  font-size: 40px;
+}
+
+.global-score {
+  font-size: 60px;
+}
+
+.round-score-container {
+  min-width: 100px;
+  height: 100px;
+}
+.round-score {
+  font-size: 40px;
+}
+
+.player-picked {
+  box-shadow: 1px 2px 5px 0px lightgrey;
+  transition: box-shadow 2s;
+}
+
+.player-unpicked {
+  opacity: 30%;
+  z-index: -1;
+  transition: opacity 2s;
+}
+
+#roll-btn, #hold-btn{
+  font-weight: bold;
+}
+#roll-btn:hover, #hold-btn:hover{
+  transform: scale(1.1);;
+}
+
+
+
+@media screen and (max-width: 767px){
+  #return-btn {
+    /* position: absolute; */
+    top: -50px !important;
+    /* left: ; */
+  }
+  #game-controls {
+    position: relative !important;
+    top: 70px !important;
+  }
+}
