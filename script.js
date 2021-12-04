@@ -55,7 +55,7 @@ const loadMenu = () => {
     startNewGame();
   })
   returnbtn.on('click', hideGameScreen);
-  rollBtn.on('click', () => { rollDice(); });
+  rollBtn.on('click', { interval: 0 }, rollAnim);
 }
 
 const showGameScreen = () => {
@@ -113,31 +113,39 @@ const drawDice = (dots) => {
 }
 
 
-
 // DICE ROLLING
 
-const rollDice = (interval = 1) => {
-  console.log(interval)
-  $(document).delay(2000, () => {
-    const number = random(6);
-    const dots = numberToDots(number);
-    drawDice(dots);
-    console.log("OK")
-    if(interval < 10) {
-      return rollDice(interval + 1);
+const rollDice = () => {
+  const number = random(6);
+  const dots = numberToDots(number);
+  drawDice(dots);
+}
+
+const rollAnim = (event) => {
+  rollBtn.off('click');
+  $(document)
+  .delay(event.data.interval * 100)
+  .dequeue()
+  .delay(0, () => {
+    rollDice();
+    if(event.data.interval < 10) {
+      event.data.interval += 1;
+      rollAnim(event);
     }
     else {
-      // Check si c'est pas un 1
-      // Si Oui > resetRoundScore + switchPlayer + fonction failed(animation)
-      // Si Non > ajoute valeur du dé a la poche
+      rollBtn.on('click', { interval: 0 }, rollAnim);
+      event.data.interval = 0;
+      // CHECK SCORE
       return;
     }
   });
-  // const number = random(6);
-  // const dots = numberToDots(number);
-  // drawDice(dots);
 }
 
+
+// DICE SCORE
+  // Check si c'est pas un 1
+  // Si Oui > resetRoundScore + switchPlayer + fonction failed(animation)
+  // Si Non > ajoute valeur du dé a la poche
 
 // START NEW GAME
 
