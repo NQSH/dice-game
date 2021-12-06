@@ -20,6 +20,7 @@ const continueBtn = $('#continue-btn');
 const playBtn = $('#play-btn');
 const returnbtn = $('#return-btn');
 const rollBtn = $('#roll-btn');
+const holdBtn = $('#hold-btn');
 
 const loadMenu = () => {
 
@@ -127,15 +128,17 @@ const rollAnim = (event) => {
   .delay(event.data.interval * 100)
   .dequeue()
   .delay(0, () => {
-    rollDice();
-    if(event.data.interval < 10) {
+    if(event.data.interval < 9) {
+      rollDice();
       event.data.interval += 1;
       rollAnim(event);
     }
     else {
       rollBtn.on('click', { interval: 0 }, rollAnim);
       event.data.interval = 0;
-      // CHECK SCORE
+      const score = rollDice();
+      checkDiceScore(score);
+      holdBtn.on('click', () => { getPickedPlayer().hold(); })
       return;
     }
   });
@@ -146,6 +149,14 @@ const rollAnim = (event) => {
   // Check si c'est pas un 1
   // Si Oui > resetRoundScore + switchPlayer + fonction failed(animation)
   // Si Non > ajoute valeur du dé a la poche
+
+const checkDiceScore = (score) => {
+  if(score === 1) {
+    endTurn();
+  } else {
+    getPickedPlayer().addToRoundScore(score);
+  }
+}
 
 // START NEW GAME
 
@@ -166,12 +177,15 @@ class Player {
     this.roundScore.html('0');
   }
   hold() {
-    score = parseInt(this.globalScore.html()) + parseInt(this.roundScore.html());
+    console.log(this.roundScore.html())
+    // score = parseInt(this.globalScore.html()) + parseInt(this.roundScore.html());
     this.globalScore.html(score);
     this.resetRoundScore();
   }
   addToRoundScore(value) {
-    this.roundScore += value;
+    console.log(value); // <<<<<<
+    this.roundScore.html(value); // A CHANGER
+    holdBtn.off('click');
   }
 }
 
@@ -207,7 +221,19 @@ const startNewGame = () => {
   if(random(2) % 2 === 0) switchPlayers();
 }
 
-// START
+const getPickedPlayer = () => {
+  return players.filter(player => player.object.hasClass('player-picked'))[0];
+}
+
+const endTurn = () => {
+  // CHECK LES GLOBAL SCORE
+  getPickedPlayer().resetRoundScore();
+  switchPlayers();
+}
+
+
+
+// LOAD PAGE
 
 $(document).ready(function() {
   loadMenu();
