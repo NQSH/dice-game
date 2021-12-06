@@ -4,8 +4,8 @@ const random = (number) => {
 
 const popAnim = (object, callback) => {
   object
-  .css('scale', '1.5')
-  .animate({ 'scale': 1 }, 1000, callback);
+    .css('scale', '1.5')
+    .animate({ 'scale': 1 }, 1000, callback);
 }
 
 // MENU LOADER
@@ -25,32 +25,32 @@ const holdBtn = $('#hold-btn');
 const loadMenu = () => {
 
   // LOADING ANIMATION
-  // setTimeout(() => {
-  //   $('.menu-btn').first().click();
-  // }, 3000)
+  setTimeout(() => {
+    $('.menu-btn').first().click();
+  }, 3000)
 
   header
-  .delay(0000)
-  .hide(0000);
+    .delay(0000)
+    .hide(0000);
 
   menuWrapper
-  .delay(0000)
-  .animate({
-    'height': '150px',
-    'opacity': '100%'
-  }, 0000, () => {
-    menuWrapper.css('height', 'auto');
-    $('.menu-name').animate({
+    .delay(0000)
+    .animate({
+      'height': '150px',
       'opacity': '100%'
-    }, 1000, () => {})    
-  })
+    }, 0000, () => {
+      menuWrapper.css('height', 'auto');
+      $('.menu-name').animate({
+        'opacity': '100%'
+      }, 1000, () => {})
+    })
 
   // ADD EVENT LISTENERS
   $('.menu-btn').on('click', function() {
     const currentMenu = $('.collapse.show');
     currentMenu.removeClass('show');
   })
-  continueBtn,playBtn.on('click', hideMenu);
+  continueBtn, playBtn.on('click', hideMenu);
   playBtn.on('click', () => {
     continueBtn.attr('disabled', false);
     startNewGame();
@@ -95,20 +95,26 @@ const diceDots = {
 }
 
 const numberToDots = (number) => {
-  switch(number) {
-    case 1: return [4];
-    case 2: return [2, 6];
-    case 3: return [2, 4, 6];
-    case 4: return [1, 2, 6, 7];
-    case 5: return [1, 2, 4, 6, 7];
-    case 6: return [1, 2, 3, 5, 6, 7];
+  switch (number) {
+    case 1:
+      return [4];
+    case 2:
+      return [2, 6];
+    case 3:
+      return [2, 4, 6];
+    case 4:
+      return [1, 2, 6, 7];
+    case 5:
+      return [1, 2, 4, 6, 7];
+    case 6:
+      return [1, 2, 3, 5, 6, 7];
   }
 }
 const drawDice = (dots) => {
   ctx.clearRect(-canvasSize / 2, -canvasSize / 2, canvasSize, canvasSize);
   dots.forEach(dot => {
     ctx.beginPath();
-    ctx.arc(diceDots[dot].x, diceDots[dot].y, 10, 0, Math.PI*2);
+    ctx.arc(diceDots[dot].x, diceDots[dot].y, 10, 0, Math.PI * 2);
     ctx.fill();
   });
 }
@@ -120,38 +126,33 @@ const rollDice = () => {
   const number = random(6);
   const dots = numberToDots(number);
   drawDice(dots);
+  return number;
 }
 
 const rollAnim = (event) => {
   rollBtn.off('click');
   $(document)
-  .delay(event.data.interval * 100)
-  .dequeue()
-  .delay(0, () => {
-    if(event.data.interval < 9) {
-      rollDice();
-      event.data.interval += 1;
-      rollAnim(event);
-    }
-    else {
-      rollBtn.on('click', { interval: 0 }, rollAnim);
-      event.data.interval = 0;
-      const score = rollDice();
-      checkDiceScore(score);
-      holdBtn.on('click', () => { getPickedPlayer().hold(); })
-      return;
-    }
-  });
+    .delay(event.data.interval * 100)
+    .dequeue()
+    .delay(0, () => {
+      if (event.data.interval < 9) {
+        rollDice();
+        event.data.interval += 1;
+        rollAnim(event);
+      }
+      else {
+        rollBtn.on('click', { interval: 0 }, rollAnim);
+        event.data.interval = 0;
+        const score = rollDice();
+        checkDiceScore(score);
+        holdBtn.on('click', () => { getPickedPlayer().hold(); })
+        return;
+      }
+    });
 }
 
-
-// DICE SCORE
-  // Check si c'est pas un 1
-  // Si Oui > resetRoundScore + switchPlayer + fonction failed(animation)
-  // Si Non > ajoute valeur du dé a la poche
-
 const checkDiceScore = (score) => {
-  if(score === 1) {
+  if (score === 1) {
     endTurn();
   } else {
     getPickedPlayer().addToRoundScore(score);
@@ -162,10 +163,10 @@ const checkDiceScore = (score) => {
 
 class Player {
   constructor(playerObject) {
-    this.object       = playerObject;
-    this.name         = this.object.find('.player-name');
-    this.globalScore  = this.object.find('.global-score');
-    this.roundScore   = this.object.find('.round-score');
+    this.object = playerObject;
+    this.name = this.object.find('.player-name');
+    this.globalScore = this.object.find('.global-score');
+    this.roundScore = this.object.find('.round-score');
   }
   setName(name) {
     this.name.html(name);
@@ -177,14 +178,15 @@ class Player {
     this.roundScore.html('0');
   }
   hold() {
-    console.log(this.roundScore.html())
-    // score = parseInt(this.globalScore.html()) + parseInt(this.roundScore.html());
-    this.globalScore.html(score);
+    const global = parseInt(this.globalScore.html());
+    const round = parseInt(this.roundScore.html());
+    this.globalScore.html(global + round);
     this.resetRoundScore();
+    endTurn();
   }
   addToRoundScore(value) {
-    console.log(value); // <<<<<<
-    this.roundScore.html(value); // A CHANGER
+    const score = parseInt(this.roundScore.html());
+    this.roundScore.html(score + value);
     holdBtn.off('click');
   }
 }
@@ -206,7 +208,7 @@ const switchPlayers = () => {
   unpicked.removeClass('player-unpicked');
 
   picked.addClass('player-unpicked');
-  picked.addClass('player-picked');
+  unpicked.addClass('player-picked');
 }
 
 const startNewGame = () => {
@@ -218,7 +220,7 @@ const startNewGame = () => {
     player.resetRoundScore();
   });
 
-  if(random(2) % 2 === 0) switchPlayers();
+  if (random(2) % 2 === 0) switchPlayers();
 }
 
 const getPickedPlayer = () => {
@@ -238,4 +240,3 @@ const endTurn = () => {
 $(document).ready(function() {
   loadMenu();
 })
-
