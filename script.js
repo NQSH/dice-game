@@ -30,15 +30,15 @@ const loadMenu = () => {
   }, 3000)
 
   header
-    .delay(0000)
-    .hide(0000);
+    .delay(2000)
+    .hide(1000);
 
   menuWrapper
-    .delay(0000)
+    .delay(2000)
     .animate({
       'height': '150px',
       'opacity': '100%'
-    }, 0000, () => {
+    }, 1000, () => {
       menuWrapper.css('height', 'auto');
       $('.menu-name').animate({
         'opacity': '100%'
@@ -223,16 +223,47 @@ const startNewGame = () => {
   if (random(2) % 2 === 0) switchPlayers();
 }
 
-const getPickedPlayer = () => {
+const getPickedPlayer = () => { // Remplacer par currentPlayer <<<
   return players.filter(player => player.object.hasClass('player-picked'))[0];
+}
+const getUnpickedPlayer = () => {
+  return players.filter(player => player.object.hasClass('player-unpicked'))[0];
 }
 
 const endTurn = () => {
-  // CHECK LES GLOBAL SCORE
+
   getPickedPlayer().resetRoundScore();
   switchPlayers();
+  holdBtn.off('click');
 }
 
+
+// CHECK LES GLOBAL SCORE
+
+const checkGlobals = () => {
+  // Stocker le first player
+  // Si le currentplayer est différent du firstPlayer 
+  const globalPickedPlayer = getPickedPlayer().globalScore.html();
+  const globalUnpickedPlayer = getUnpickedPlayer().globalScore.html();
+  if (globalPickedPlayer >= 100 &&
+    globalUnpickedPlayer < 100) {
+    // Picked est winner
+  } else if (globalPickedPlayer < 100 &&
+    globalUnpickedPlayer >= 100) {
+    // Unpicked est winner
+  } else {
+    // Egalité
+  }
+}
+
+
+// DISPLAY WINNER
+
+const displayWinner = (player) => {
+  // pop modal avec nom du vainqueur
+  // continueBtn off click
+  // demander si rejouer, si oui starnewgame sinon retour menu
+}
 
 
 // LOAD PAGE
