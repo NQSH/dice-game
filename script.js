@@ -50,7 +50,8 @@ const loadMenu = () => {
     const currentMenu = $('.collapse.show');
     currentMenu.removeClass('show');
   })
-  continueBtn, playBtn.on('click', hideMenu);
+  continueBtn.on('click', hideMenu)
+  playBtn.on('click', hideMenu);
   playBtn.on('click', () => {
     continueBtn.attr('disabled', false);
     startNewGame();
