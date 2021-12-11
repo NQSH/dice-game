@@ -260,9 +260,14 @@ const checkGlobals = () => {
 // DISPLAY WINNER
 
 const displayWinner = (player) => {
+  // si player
   // pop modal avec nom du vainqueur
-  // continueBtn off click
-  // demander si rejouer, si oui starnewgame sinon retour menu
+  // sinn
+  // pop modal egalité
+  // demander si rejouer dans modal
+  // continueBtn off click ()
+  // si oui starnewgame
+  // sinon retour menu
 }
 
 
