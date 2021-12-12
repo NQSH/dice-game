@@ -1,13 +1,5 @@
-// TOOLS
-
 const random = (number) => {
   return Math.floor(Math.random() * number) + 1;
-}
-
-const popAnim = (object, callback) => {
-  object
-    .css('scale', '1.5')
-    .animate({ 'scale': 1 }, 1000, callback);
 }
 
 
