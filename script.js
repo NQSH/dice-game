@@ -139,78 +139,72 @@ class Player {
 }
 
 
-// PLAYERS MANAGER
+// PLAYERS
 
-class Players {
-  constructor() {
-    this.list = [
-      new Player($('#player1')),
-      new Player($('#player2'))
-    ];
-  }
-  current = () => { 
-    return this.list.filter(player => player.object.hasClass('player-picked'))[0]; 
-  }
-  initialize = () => {
+const players = {
+  list: [
+    new Player($('#player1')),
+    new Player($('#player2'))
+  ],
+  current: () => { 
+    return players.list.filter(player => player.object.hasClass('player-picked'))[0]; 
+  },
+  initialize: () => {
     const regex = /<[^>]*>/g;
-    this.list.forEach((player, index) => {
+    players.list.forEach((player, index) => {
       const input = $(`#player${index + 1}-input`);
       const inputValue = input.val().replaceAll(regex, "");
       player.name = inputValue !== '' ? inputValue.toUpperCase() : `Player ${index + 1}`;
       player.resetGlobal();
       player.resetRound();
     });
+  },
+  switchPlayers: () => {
+    const picked = $('.player-picked');
+    const unpicked = $('.player-unpicked');
+  
+    picked.removeClass('player-picked');
+    unpicked.removeClass('player-unpicked');
+  
+    picked.addClass('player-unpicked');
+    unpicked.addClass('player-picked');
   }
 }
-Players.prototype.switchPlayers = () => {
-  const picked = $('.player-picked');
-  const unpicked = $('.player-unpicked');
-
-  picked.removeClass('player-picked');
-  unpicked.removeClass('player-unpicked');
-
-  picked.addClass('player-unpicked');
-  unpicked.addClass('player-picked');
-}
 
 
-// GAME MANAGER
+// GAME
 
-class Game {
-  constructor() {
-    this.players = new Players();
-  }
-
-  startNewGame = () => {
-    this.players.initialize();
-    if (random(2) % 2 === 0) this.players.switchPlayers();
-  }
-  endTurn = () => {
-    const player = this.players.current();
+const game = {
+  startNewGame: () => {
+    players.initialize();
+    if (random(2) % 2 === 0) players.switchPlayers();
+  },
+  endTurn: () => {
+    const player = players.current();
     player.resetRound();
   
     if (player.global >= 100) {
-      this.endGame();
+      game.endGame();
     } else {
-      this.players.switchPlayers();
+      players.switchPlayers();
     }
-  }
-  endGame = () => {
-    this.displayWinner(this.players.current());
+  },
+  endGame: () => {
+    game.displayWinner(players.current());
     continueBtn.attr('disabled', true);
-  }
-  checkDiceScore = (score) => {
+  },
+  checkDiceScore: (score) => {
     if (score === 1) {
-      this.endTurn();
+      game.endTurn();
     } else {
-      this.players.current().round += score;
+      players.current().round += score;
       holdBtn.on('click', () => {
-        this.players.current().hold();
-        this.endTurn();
+        players.current().hold();
+        game.endTurn();
       });
     }
-  }
-  displayWinner = (player) => {
+  },
+  displayWinner: (player) => {
     const modalBody = endgameModal.find('.modal-body');
     const p = document.createElement('p');
     const text = `Le vainqueur est ${player.name}`;
@@ -241,7 +235,6 @@ const replayBtn = $('#replay-btn');
 const endgameModal = $('#endgame-modal');
 const newgameModal = $('#newgame-modal');
 
-const game = new Game();
 
 // LOAD PAGE
 
