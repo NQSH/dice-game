@@ -1,3 +1,5 @@
+// TOOLS
+
 const random = (number) => {
   return Math.floor(Math.random() * number) + 1;
 }
@@ -8,57 +10,8 @@ const popAnim = (object, callback) => {
     .animate({ 'scale': 1 }, 1000, callback);
 }
 
-// MENU LOADER
 
-// Wrappers
-const header = $('header');
-const menuWrapper = $('#menu-wrapper');
-const gameScreen = $('#game-screen');
-
-// Buttons
-const continueBtn = $('#continue-btn');
-const playBtn = $('#play-btn');
-const returnbtn = $('#return-btn');
-const rollBtn = $('#roll-btn');
-const holdBtn = $('#hold-btn');
-
-const loadMenu = () => {
-
-  // LOADING ANIMATION
-  setTimeout(() => {
-    $('.menu-btn').first().click();
-  }, 3000)
-
-  header
-    .delay(2000)
-    .hide(1000);
-
-  menuWrapper
-    .delay(2000)
-    .animate({
-      'height': '150px',
-      'opacity': '100%'
-    }, 1000, () => {
-      menuWrapper.css('height', 'auto');
-      $('.menu-name').animate({
-        'opacity': '100%'
-      }, 1000, () => {})
-    })
-
-  // ADD EVENT LISTENERS
-  $('.menu-btn').on('click', function() {
-    const currentMenu = $('.collapse.show');
-    currentMenu.removeClass('show');
-  })
-  continueBtn.on('click', hideMenu)
-  playBtn.on('click', hideMenu);
-  playBtn.on('click', () => {
-    continueBtn.attr('disabled', false);
-    startNewGame();
-  })
-  returnbtn.on('click', hideGameScreen);
-  rollBtn.on('click', { interval: 0 }, rollAnim);
-}
+// GAME/MENU SWITCH
 
 const showGameScreen = () => {
   gameScreen.fadeIn(1000);
@@ -68,11 +21,11 @@ const hideGameScreen = () => {
   gameScreen.fadeOut(1000, showMenu);
 }
 
-const hideMenu = () => {
-  menuWrapper.fadeOut(1000, showGameScreen);
-}
 const showMenu = () => {
   menuWrapper.fadeIn(1000);
+}
+const hideMenu = () => {
+  menuWrapper.fadeOut(1000, showGameScreen);
 }
 
 
@@ -82,7 +35,7 @@ const diceCanvas = document.querySelector('#dice-display');
 const ctx = diceCanvas.getContext('2d');
 const canvasSize = diceCanvas.width;
 const dotSpacing = canvasSize / 4;
-ctx.translate(50, 50);
+ctx.translate(canvasSize / 2, canvasSize / 2);
 ctx.fillStyle = '#dc3545';
 
 const diceDots = {
@@ -132,6 +85,8 @@ const rollDice = () => {
 
 const rollAnim = (event) => {
   rollBtn.off('click');
+  holdBtn.off('click');
+
   $(document)
     .delay(event.data.interval * 100)
     .dequeue()
@@ -144,64 +99,70 @@ const rollAnim = (event) => {
       else {
         rollBtn.on('click', { interval: 0 }, rollAnim);
         event.data.interval = 0;
-        const score = rollDice();
-        checkDiceScore(score);
-        holdBtn.on('click', () => { getPickedPlayer().hold(); })
+        const score = rollDice();        
+        game.checkDiceScore(score);
         return;
       }
     });
 }
 
-const checkDiceScore = (score) => {
-  if (score === 1) {
-    endTurn();
-  } else {
-    getPickedPlayer().addToRoundScore(score);
-  }
-}
 
-// START NEW GAME
+// PLAYER
 
 class Player {
   constructor(playerObject) {
     this.object = playerObject;
-    this.name = this.object.find('.player-name');
+    this.playerName = this.object.find('.player-name');
     this.globalScore = this.object.find('.global-score');
     this.roundScore = this.object.find('.round-score');
   }
-  setName(name) {
-    this.name.html(name);
+
+  set name(name) { this.playerName.html(name); }
+  get name() { return this.playerName.html(); }
+
+  set global(value) { this.globalScore.html(value); }
+  get global() { return parseInt(this.globalScore.html()); }
+
+  set round(value) { this.roundScore.html(value); }
+  get round() { return parseInt(this.roundScore.html()); }
+
+  resetGlobal() {
+    this.global = '0';
   }
-  resetGlobalScore() {
-    this.globalScore.html('0');
-  }
-  resetRoundScore() {
-    this.roundScore.html('0');
+  resetRound() {
+    this.round = '0';
   }
   hold() {
-    const global = parseInt(this.globalScore.html());
-    const round = parseInt(this.roundScore.html());
-    this.globalScore.html(global + round);
-    this.resetRoundScore();
-    endTurn();
-  }
-  addToRoundScore(value) {
-    const score = parseInt(this.roundScore.html());
-    this.roundScore.html(score + value);
-    holdBtn.off('click');
+    this.global += this.round; 
+    this.resetRound();
   }
 }
 
-const players = [];
-const player1 = new Player($('#player1'));
-const player2 = new Player($('#player2'));
 
-players.push(player1, player2);
+// PLAYERS MANAGER
 
-const player1Input = $('#player1-input');
-const player2Input = $('#player2-input');
-
-const switchPlayers = () => {
+class Players {
+  constructor() {
+    this.list = [
+      new Player($('#player1')),
+      new Player($('#player2'))
+    ];
+  }
+  current = () => { 
+    return this.list.filter(player => player.object.hasClass('player-picked'))[0]; 
+  }
+  initialize = () => {
+    const regex = /<[^>]*>/g;
+    this.list.forEach((player, index) => {
+      const input = $(`#player${index + 1}-input`);
+      const inputValue = input.val().replaceAll(regex, "");
+      player.name = inputValue !== '' ? inputValue.toUpperCase() : `Player ${index + 1}`;
+      player.resetGlobal();
+      player.resetRound();
+    });
+  }
+}
+Players.prototype.switchPlayers = () => {
   const picked = $('.player-picked');
   const unpicked = $('.player-unpicked');
 
@@ -212,68 +173,139 @@ const switchPlayers = () => {
   unpicked.addClass('player-picked');
 }
 
-const startNewGame = () => {
-  players.forEach((player, index) => {
-    const regex = /<[^>]*>/g;
-    const inputValue = $(`#player${index + 1}-input`).val().replaceAll(regex, "");
-    player.setName(inputValue !== '' ? inputValue.toUpperCase() : `Player ${index + 1}`);
-    player.resetGlobalScore();
-    player.resetRoundScore();
-  });
 
-  if (random(2) % 2 === 0) switchPlayers();
-}
+// GAME MANAGER
 
-const getPickedPlayer = () => { // Remplacer par currentPlayer <<<
-  return players.filter(player => player.object.hasClass('player-picked'))[0];
-}
-const getUnpickedPlayer = () => {
-  return players.filter(player => player.object.hasClass('player-unpicked'))[0];
-}
+class Game {
+  constructor() {
+    this.players = new Players();
+  }
 
-const endTurn = () => {
-
-  getPickedPlayer().resetRoundScore();
-  switchPlayers();
-  holdBtn.off('click');
-}
-
-
-// CHECK LES GLOBAL SCORE
-
-const checkGlobals = () => {
-  // Stocker le first player
-  // Si le currentplayer est différent du firstPlayer 
-  const globalPickedPlayer = getPickedPlayer().globalScore.html();
-  const globalUnpickedPlayer = getUnpickedPlayer().globalScore.html();
-  if (globalPickedPlayer >= 100 &&
-    globalUnpickedPlayer < 100) {
-    // Picked est winner
-  } else if (globalPickedPlayer < 100 &&
-    globalUnpickedPlayer >= 100) {
-    // Unpicked est winner
-  } else {
-    // Egalité
+  startNewGame = () => {
+    this.players.initialize();
+    if (random(2) % 2 === 0) this.players.switchPlayers();
+  }
+  endTurn = () => {
+    const player = this.players.current();
+    player.resetRound();
+  
+    if (player.global >= 100) {
+      this.endGame();
+    } else {
+      this.players.switchPlayers();
+    }
+  }
+  endGame = () => {
+    this.displayWinner(this.players.current());
+    continueBtn.attr('disabled', true);
+  }
+  checkDiceScore = (score) => {
+    if (score === 1) {
+      this.endTurn();
+    } else {
+      this.players.current().round += score;
+      holdBtn.on('click', () => {
+        this.players.current().hold();
+        this.endTurn();
+      });
+    }
+  }
+  displayWinner = (player) => {
+    const modalBody = endgameModal.find('.modal-body');
+    const p = document.createElement('p');
+    const text = `Le vainqueur est ${player.name}`;
+    
+    p.innerHTML = text;
+    modalBody.html(p);
+    
+    endgameModal.modal('toggle');
   }
 }
 
 
-// DISPLAY WINNER
+// Wrappers
+const header = $('header');
+const menuWrapper = $('#menu-wrapper');
+const gameScreen = $('#game-screen');
 
-const displayWinner = (player) => {
-  // si player
-  // pop modal avec nom du vainqueur
-  // sinn
-  // pop modal egalité
-  // demander si rejouer dans modal
-  // continueBtn off click ()
-  // si oui starnewgame
-  // sinon retour menu
-}
+// Buttons
+const continueBtn = $('#continue-btn');
+const playBtn = $('#play-btn');
+const returnbtn = $('#return-btn');
+const rollBtn = $('#roll-btn');
+const holdBtn = $('#hold-btn');
+const quitBtn = $('#quit-btn');
+const replayBtn = $('#replay-btn');
 
+// Modal
+const endgameModal = $('#endgame-modal');
+const newgameModal = $('#newgame-modal');
+
+const game = new Game();
 
 // LOAD PAGE
 
+const animateMenu = () => {
+  setTimeout(() => {
+    $('.menu-btn').first().click();
+  }, 3000)
+
+  header
+    .delay(2000)
+    .hide(1000);
+
+  menuWrapper
+    .delay(2000)
+    .animate({
+      'height': '150px',
+      'opacity': '100%'
+    }, 1000, () => {
+      menuWrapper.css('height', 'auto');
+      $('.menu-name').animate({
+        'opacity': '100%'
+      }, 1000, () => {})
+    })
+}
+
+const setEventListeners = () => {
+  // Menu
+  $('.menu-btn').on('click', function() {
+    const currentMenu = $('.collapse.show');
+    currentMenu.removeClass('show');
+  })
+  continueBtn.on('click', hideMenu)
+  
+  // Game controls
+  returnbtn.on('click', hideGameScreen);
+  rollBtn.on('click', { interval: 0 }, rollAnim);
+
+  // Newgame Modal
+  newgameModal.on('show.bs.modal', () => {
+    playBtn.on('click', () => {
+      hideMenu();
+      game.startNewGame();
+      continueBtn.attr('disabled', false);
+      playBtn.off('click');
+    })
+  })
+  
+  // Endgame Modal
+  endgameModal.on('show.bs.modal', () => {
+    quitBtn.on('click', () => {
+      hideGameScreen();
+    });  
+    replayBtn.on('click', () => {
+      game.startNewGame();
+      continueBtn.attr('disabled', false);
+    });
+  })
+  endgameModal.on('hidden.bs.modal', () => {
+    quitBtn.off('click');
+    replayBtn.off('click');
+  })
+}
+
 $(document).ready(function() {
-  loadMenu();
+  animateMenu();
+  setEventListeners();
 })
