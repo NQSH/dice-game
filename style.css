@@ -90,12 +90,9 @@ p.card-text {
 }
 
 
-
 @media screen and (max-width: 767px){
   #return-btn {
-    /* position: absolute; */
     top: -50px !important;
-    /* left: ; */
   }
   #game-controls {
     position: relative !important;
