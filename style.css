@@ -24,7 +24,7 @@ h2 {
   margin-bottom: 0px;
 }
 
-p.card-text {
+p.card-text, li {
   font-size: .8rem !important;
 }
 
@@ -49,10 +49,6 @@ p.card-text {
 
 #return-btn > button:not(:hover) {
   background-color: white;
-}
-
-#game-controls {
-  
 }
 
 .player-name {
