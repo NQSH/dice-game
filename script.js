@@ -236,19 +236,19 @@ const animateMenu = () => {
   }, 3000)
 
   header
-    .delay(2000)
-    .hide(1000);
+    .delay(1500)
+    .hide(500);
 
   menuWrapper
     .delay(2000)
     .animate({
       'height': '150px',
       'opacity': '100%'
-    }, 1000, () => {
+    }, 500, () => {
       menuWrapper.css('height', 'auto');
       $('.menu-name').animate({
         'opacity': '100%'
-      }, 1000, () => {})
+      }, 500, () => {})
     })
 }
 
