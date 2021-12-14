@@ -126,7 +126,6 @@ class Player {
   }
   hold() {
     this.global += this.round; 
-    this.resetRound();
   }
 }
 
@@ -160,6 +159,8 @@ const players = {
   
     picked.addClass('player-unpicked');
     unpicked.addClass('player-picked');
+
+    players.current().resetRound();
   }
 }
 
@@ -173,7 +174,6 @@ const game = {
   },
   endTurn: () => {
     const player = players.current();
-    player.resetRound();
   
     if (player.global >= 100) {
       game.endGame();
