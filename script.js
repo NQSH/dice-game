@@ -171,6 +171,7 @@ const game = {
   startNewGame: () => {
     players.initialize();
     if (random(2) % 2 === 0) players.switchPlayers();
+    rollBtn.attr('disabled', false);
   },
   endTurn: () => {
     const player = players.current();
@@ -184,6 +185,7 @@ const game = {
   endGame: () => {
     game.displayWinner(players.current());
     continueBtn.attr('disabled', true);
+    rollBtn.attr('disabled', true);
   },
   checkDiceScore: (score) => {
     if (score === 1) {
